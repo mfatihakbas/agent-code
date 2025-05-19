@@ -1,6 +1,5 @@
-# api.py
-
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from airtable_client import temizle, embedding_model, add_record, bul_benzer_kayit, increment_usage_count
 from openai_client import get_openai_answer
@@ -17,7 +16,7 @@ async def ask_question(req: QuestionRequest):
     user_input = req.question.strip()
 
     if not is_ml_related(user_input):
-        return {"answer": "⚠️ This question is not related to machine learning."}
+        return JSONResponse(content={"reply_answer": "⚠️ Bu soru makine öğrenmesiyle ilgili değil."})
 
     temiz_soru = temizle(user_input)
     embed = embedding_model.encode([temiz_soru])[0].tolist()
@@ -28,22 +27,14 @@ async def ask_question(req: QuestionRequest):
 
     if kayit:
         increment_usage_count(record_id)
-        return {
-            "answer": kayit["answer"],
-            "source": "airtable",
-            "similarity": round(skor, 4),
-            "time": elapsed
-        }
+        mesaj = f"🧠 Yanıt: {kayit['answer']}"
+        return JSONResponse(content={"reply_answer": mesaj})
 
     yanit = get_openai_answer(user_input)
 
     if yanit and "OpenAI API'den yanıt alınamadı" not in yanit:
         add_record(user_input, yanit, source="openai", embedding=embed)
-        return {
-            "answer": yanit,
-            "source": "openai",
-            "similarity": None,
-            "time": elapsed
-        }
+        mesaj = f"🧠 Yanıt: {yanit}"
+        return JSONResponse(content={"reply_answer": mesaj})
 
-    return {"answer": "❌ Sorry, I couldn't generate an answer right now."}
+    return JSONResponse(content={"reply_answer": "❌ Şu anda yanıt üretilemedi."})
