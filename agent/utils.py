@@ -4,7 +4,7 @@ ml_keywords = [
     # Temel kavramlar
     "makine öğrenmesi", "machine learning", "yapay zeka", "veri kümesi", 
     "eğitim verisi", "test verisi", "label", "feature", "etiket", "özellik", "target", "input", "output",
-    
+
     # Öğrenme türleri
     "denetimli", "denetimsiz", "yarı denetimli", "pekiştirmeli öğrenme", 
     "reinforcement learning", "semi-supervised", "unsupervised learning", "supervised learning",
@@ -58,5 +58,9 @@ ml_keywords = [
 
 
 def is_ml_related(text: str) -> bool:
+    """
+    Checks if the given text contains ML-related keywords.
+    Returns True if any keyword is found, otherwise False.
+    """
     text = text.lower()
     return any(keyword in text for keyword in ml_keywords)

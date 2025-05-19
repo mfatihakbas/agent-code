@@ -1,43 +1,49 @@
 # api.py
-from fastapi import FastAPI, Request
-from main import temizle, vector_db, is_ml_related, get_gemini_answer
-from langchain_core.documents import Document
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+from airtable_client import temizle, embedding_model, add_record, bul_benzer_kayit, increment_usage_count
+from openai_client import get_openai_answer
+from utils import is_ml_related
+import time
 
 app = FastAPI()
 
+class QuestionRequest(BaseModel):
+    question: str
+
 @app.post("/ask")
-async def ask_question(req: Request):
-    data = await req.json()
-    user_input = data.get("question", "").strip()
-    if not user_input:
-        return {"answer": "Soru eksik."}
-
-    temiz_soru = temizle(user_input)
-    sonuclar = vector_db.similarity_search_with_score(temiz_soru, k=3)
-
-    en_iyi_sonuc = None
-    en_iyi_skor = 1.0
-
-    for doc, skor in sonuclar:
-        if skor < en_iyi_skor:
-            en_iyi_sonuc = doc
-            en_iyi_skor = skor
-
-    if en_iyi_skor < 0.8:
-        return {
-            "answer": en_iyi_sonuc.metadata["cevap"],
-            "source": en_iyi_sonuc.metadata.get("source", "unknown")
-        }
+async def ask_question(req: QuestionRequest):
+    user_input = req.question.strip()
 
     if not is_ml_related(user_input):
-        return {"answer": "Bu soru makine öğrenmesiyle ilgili değil."}
+        return {"answer": "⚠️ This question is not related to machine learning."}
 
-    yanit = get_gemini_answer(user_input)
-    if "Gemini API'den yanıt alınamadı" in yanit:
-        return {"answer": "API'den yanıt alınamadı."}
+    temiz_soru = temizle(user_input)
+    embed = embedding_model.encode([temiz_soru])[0].tolist()
 
-    yeni_doc = Document(page_content=temiz_soru, metadata={"cevap": yanit, "source": "gemini"})
-    vector_db.add_documents([yeni_doc])
-    vector_db.persist()
-    
-    return {"answer": yanit, "source": "gemini"}
+    start = time.time()
+    kayit, skor, record_id = bul_benzer_kayit(embed)
+    elapsed = round(time.time() - start, 4)
+
+    if kayit:
+        increment_usage_count(record_id)
+        return {
+            "answer": kayit["answer"],
+            "source": "airtable",
+            "similarity": round(skor, 4),
+            "time": elapsed
+        }
+
+    yanit = get_openai_answer(user_input)
+
+    if yanit and "OpenAI API'den yanıt alınamadı" not in yanit:
+        add_record(user_input, yanit, source="openai", embedding=embed)
+        return {
+            "answer": yanit,
+            "source": "openai",
+            "similarity": None,
+            "time": elapsed
+        }
+
+    return {"answer": "❌ Sorry, I couldn't generate an answer right now."}
