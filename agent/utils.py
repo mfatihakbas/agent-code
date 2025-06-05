@@ -1,65 +1,123 @@
 # utils.py
 
-ml_keywords = [
-    # Temel kavramlar
-    "makine öğrenmesi", "machine learning", "yapay zeka", "veri kümesi", 
-    "eğitim verisi", "test verisi", "label", "feature", "etiket", "özellik", "target", "input", "output",
-
-    # Öğrenme türleri
-    "denetimli", "denetimsiz", "yarı denetimli", "pekiştirmeli öğrenme", 
-    "reinforcement learning", "semi-supervised", "unsupervised learning", "supervised learning",
-
-    # Doğruluk / değerlendirme
-    "doğruluk", "accuracy", "precision", "recall", "f1 skoru", "confusion matrix", 
-    "ROC", "AUC", "değerlendirme metriği", "performans metriği", "loss", "hata oranı",
-
-    # Problemler
-    "overfitting", "underfitting", "bias", "variance", "genelleme", "aşırı öğrenme",
-
-    # Model türleri ve algoritmalar
-    "regresyon", "sınıflandırma", "clustering", "kümeleme", 
-    "karar ağacı", "decision tree", "random forest", "logistic regression", "linear regression", 
-    "naive bayes", "k-nearest neighbors", "knn", "svm", "support vector machine", 
-    "ensemble", "bagging", "boosting", "xgboost", "lightgbm", "gradient boosting", "catboost",
-
-    # Derin öğrenme
-    "deep learning", "derin öğrenme", "yapay sinir ağı", "neural network", 
-    "cnn", "convolutional neural network", "rnn", "lstm", "transformer", 
-    "attention", "self-attention", "seq2seq", "autoencoder", "gan", "generative adversarial network",
-
-    # Özellik mühendisliği
-    "feature engineering", "feature extraction", "feature selection", 
-    "pca", "principal component analysis", "özellik seçimi", "boyut indirgeme",
-
-    # Veri ön işleme
-    "feature scaling", "normalizasyon", "standartlaştırma", "min-max scaling", 
-    "z-score", "eksik veri", "missing value", "outlier", "kategori kodlama", 
-    "one-hot encoding", "label encoding", "veri temizleme", "ön işleme", "data preprocessing",
-
-    # Eğitim yöntemleri
-    "cross validation", "k-fold", "early stopping", "grid search", "random search", 
-    "hiperparametre", "hyperparameter tuning", "model seçimi", "validation set",
-
-    # Kütüphaneler ve framework'ler
-    "scikit-learn", "tensorflow", "keras", "pytorch", "xgboost", "lightgbm", 
-    "statsmodels", "mlflow", "huggingface", "optuna", "transformers",
-
-    # Uygulama alanları
-    "doğal dil işleme", "nlu", "nlp", "bilgisayarla görme", "görüntü işleme", 
-    "öneri sistemi", "recommendation system", "zaman serisi", "time series", 
-    "anomalie tespiti", "anomaly detection", "makine arızası tahmini",
-
-    # Diğer önemli kavramlar
-    "pipeline", "model pipeline", "skor", "metriks", "veri bölme", "train test split", 
-    "data augmentation", "tokenization", "embedding", "word2vec", "bert", "gpt",
-    "transfer öğrenme", "transfer learning", "veri dengesizliği", "class imbalance", "sampling", 
-    "oversampling", "undersampling", "smote"
-]
-
+ml_keywords = list(set([
+    # Orijinal A ve ml_keywords birleşimi (küçük harfe çevrilmiş)
+    "python", "html", "css", "javascript", "react", "angular", "vue.js", "responsive design", 
+    "ui design", "ux design", "bootstrap", "merhaba", "merhabalar", "selamlar", "selam", 
+    "sass/scss", "webpack", "ajax", "restful api", "fotograf", "görsel", "select", "from", 
+    "where", "join", "inner join", "outer join", "left join", "right join", "group by", 
+    "having", "order by", "insert into", "update", "delete", "create table", "alter table", 
+    "primary key", "foreign key", "index", "trigger", "fotoğraf", "ekran", "screenshot", 
+    "json", "dom", "frontend framework", "cross-browser compatibility", "web accessibility", 
+    "single page application (spa)", "vector", "matrix", "scalar", "linear transformation", 
+    "eigenvalue", "eigenvector", "determinant", "transpose", "orthogonal", "rank", "span", 
+    "basis", "inner product", "singular value decomposition (svd)", "matrix inversion", 
+    "least squares", "linear independence", "cross product", "dot product", "row echelon form", 
+    "model-view-controller (mvc)", "orm (object-relational mapping)", "django models", 
+    "django views", "django templates", "django forms", "django admin", "queryset", 
+    "middleware", "django rest framework", "django migrations", "django url patterns", 
+    "django signals", "django static files", "django database api", "django authentication", 
+    "git", "github", "repository", "branch", "commit", "merge", "pull request", "fork", 
+    "clone", "remote", "origin", "upstream", "gitignore", "version control system", 
+    "master branch", "conflict resolution", "git workflow", "github actions", "issue", "wiki", 
+    "git hooks", "submodule", "laravel", "saas (software as a service)", "multi-tenancy", 
+    "subscription billing", "tenant", "billing cycle", "user authentication", 
+    "laravel blade templates", "laravel eloquent orm", "laravel migrations", 
+    "laravel middleware", "laravel artisan", "laravel nova", "laravel passport", 
+    "laravel cashier", "laravel vapor", "saas metrics", "trial period", 
+    "role-based access control (rbac)", "invoice generation", "payment gateway integration", 
+    "rest", "api", "endpoint", "http methods (get, post, put, delete)", "authentication token", 
+    "request", "response", "status code", "rate limiting", "pagination", "versioning", 
+    "versiyon", "kontrol", "hateoas", "webhooks", "cross-origin resource sharing (cors)", 
+    "graphql", "soap", "stateless", "stateful", "generative", "prompt", "opeanai", "hata", 
+    "hmtl", "okut", "işlem", "/", "( )", "coef", "corr", "korelason", "validasyon", "metric", 
+    "metrik", "csv", "xml", "excel", "kurulum", "zaman serileri", "lag", "üretken", "accuracy", 
+    "veri", "anlamadım", "anlayamadım", "analiz", "oran", "kategorik", "sayısal", "değişken", 
+    "frekans", "dağılım", "varyans", "ki-kare", "ki kare", "anova", "test", "standart sapma", 
+    "ortalama", "medyan", "mod", "kesikli", "sürekli", "olabilirlik", "popülasyon", 
+    "örneklem", "hipotez", "p-değeri", "istatistiksel anlamlılık", "regresyon", "korelasyon", 
+    "chi-kare", "normal dağılım", "kesikli olasılık dağılımı", "binom dağılım", 
+    "poisson dağılım", "standart normal dağılım", "kesikli uniform dağılım", 
+    "kesikli bernoulli dağılım", "çapraz tablo", "kesikli veri", "kesikli değişken", 
+    "kesikli rastgele değişken", "olabilirlik dağılımı", "varsayım kontrolü", 
+    "istatistiksel test", "regresyon analizi", "belirginlik düzeyi", "varyans analizi", 
+    "standart hata", "fitting", "target", "f1", "skor", "xgboost", "lightgbm", "model", 
+    "yardımcı", "error", "kod", "istatistik", "df", "plot", "show", "np", "pd", "import", 
+    "virtual", "orman", "random", "pd.", "np.", "path", "betimsel", "if", "else", "for", 
+    "while", "fonksiyon", "sınıf", "liste", "demet", "sözlük", "koşul", "döngü", 
+    "indentasyon", "modül", "kütüphane", "try", "except", "print", "input", "return", 
+    "append", "split", "join", "lambda", "map", "filter", "global", "local", "sort", "len", 
+    "enumerate", "open", "read", "write", "with", "yield", "self", "true", "false", 
+    "veri bilimi", "docker", "veri analizi", "makine öğrenimi", "veritabanı", "yapay zeka", 
+    "veri madenciliği", "pandas", "numpy", "scikit-learn", "jupyter", "veri görselleştirme", 
+    "veri tabanı yönetimi", "veri saklama", "veri seti", "veri temizleme", "veri modelleme", 
+    "veri işleme", "tensorflow", "keras", "pytorch", "nlp", "doğal dil işleme", 
+    "veri keşfi", "big data", "hadoop", "spark", "veri yönetimi", "data engineering", 
+    "veri sızdırmazlık", "data science pipeline", "dockerfile", "containerization", 
+    "docker hub", "docker compose", "docker swarm", "konteyner", "orkestrasyon", 
+    "docker image", "docker volume", "kubernetes", "k8s", "pod", "kubelet", "minikube", 
+    "kubeconfig", "yaml dosyası", "kube proxy", "docker registry", "konteyner ağı", 
+    "kubernetes hizmeti", "kube controller manager", "kube scheduler", "kube api sunucusu", 
+    "büyük veri", "veri depolama", "veri analitiği", "data lake", "data warehouse", 
+    "etl (extract, transform, load)", "sql", "nosql", "dbms", "sql server", "postgresql", 
+    "mysql", "mongodb", "redis", "cassandra", "veri tabanı tasarımı", "acid", "cap teoremi", 
+    "sql sorguları", "database index", "stored procedure", "veri yedekleme", "veri güvenliği", 
+    "data visualization", "matplotlib", "seaborn", "plotly", "data dashboard", 
+    "data insights", "machine learning algorithms", "supervised learning", 
+    "unsupervised learning", "reinforcement learning", "classification", "regression", 
+    "clustering", "dimensionality reduction", "ensemble learning", "deep learning", 
+    "neural networks", "convolutional neural networks (cnn)", "recurrent neural networks (rnn)", 
+    "sentiment analysis", "text mining", "topic modeling", "word embeddings", "tokenization", 
+    "data pipeline", "etl process", "data integration", "data warehousing", 
+    "big data technologies", "mapreduce", "hive", "scala", "data streaming", "apache kafka", 
+    "stream processing", "real-time analytics", "distributed systems", "microservices", 
+    "devops", "ci/cd", "version control", "gitlab", "bitbucket", "continuous integration", 
+    "continuous deployment", "infrastructure as code (iac)", "monitoring and logging", 
+    "elk stack", "prometheus", "grafana", "application deployment", "load balancing", 
+    "scalability", "service discovery", "cloud computing", "amazon web services (aws)", 
+    "amazon ec2", "amazon s3", "amazon rds", "google cloud platform (gcp)", 
+    "google compute engine", "google kubernetes engine (gke)", "microsoft azure", 
+    "azure virtual machines", "azure kubernetes service (aks)", "serverless computing", 
+    "aws lambda", "google cloud functions", "azure functions", "data security", "encryption", 
+    "access control", "data privacy", "compliance", "cybersecurity", "data breach", 
+    "data masking", "data encryption", "ssl/tls", "oauth", "multi-factor authentication", 
+    "penetration testing", "cyber threat intelligence", "incident response", 
+    "security operations center (soc)", "ethical hacking", "iso 27001", "hipaa", "gdpr", 
+    "data analytics", "statistical analysis", "descriptive statistics", 
+    "inferential statistics", "a/b testing", "hypothesis testing", 
+    "data-driven decision making", "business intelligence", "data reporting", 
+    "dashboard design", "jupyter notebook", "python libraries", "scipy", "nltk", "spacy", 
+    "beautiful soup", "flask", "django", "sqlalchemy", "data visualization tools", 
+    "tableau", "power bi", "qlikview", "d3.js", "data engineering tools", "apache nifi", 
+    "apache airflow", "talend", "apache beam", "database management systems (dbms)", 
+    "relational database management system (rdbms)", "nosql database", 
+    "document-oriented database", "key-value store", "columnar database", "graph database", 
+    "in-memory database", "time series database", "database indexing", "query optimization", 
+    "database replication", "database sharding", "database backup and recovery", 
+    "database security", "sql injection", "data warehouse design", "star schema", 
+    "snowflake schema", "data governance", "data catalog", "data quality", 
+    "master data management (mdm)", "data lifecycle management", "data lake architecture", 
+    "data modeling techniques", "entity-relationship diagram (erd)", 
+    "dimensional modeling", "normalized vs. denormalized data", 
+    "data warehouse vs. data lake", "data mining algorithms", "association rules", 
+    "cluster analysis", "decision trees", "support vector machines (svm)", "naive bayes", 
+    "k-means clustering", "principal component analysis (pca)", "collaborative filtering", 
+    "recommender systems", "long short-term memory (lstm)", "generative adversarial networks (gan)", 
+    "stemming", "lemmatization", "stop words", "named entity recognition (ner)", 
+    "text classification", "bert", "gpt-3", "word2vec", "data cleaning", "data transformation", 
+    "feature engineering", "scaling", "imputation", "outlier detection", 
+    "dimensionality reduction", "feature selection", "cross-validation", 
+    "model evaluation metrics", "precision", "recall", "f1-score", "roc curve", 
+    "confusion matrix", "bias and fairness in machine learning", "explainable ai (xai)", 
+    "model deployment", "model serving", "monitoring machine learning models", 
+    "data labeling", "data annotation", "active learning", "automl", "ai ethics", 
+    "responsible ai", "bias mitigation", "fairness auditing", "privacy-preserving ai", 
+    "crm", "segmentasyon", "git", "def", "anla", "makine", "öğrenme", "doğruluk hesaplama"
+]))
 
 def is_ml_related(text: str) -> bool:
     """
-    Checks if the given text contains ML-related keywords.
+    Checks if the given text contains ML-related or technical keywords.
     Returns True if any keyword is found, otherwise False.
     """
     text = text.lower()
